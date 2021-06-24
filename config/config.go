@@ -46,7 +46,7 @@ func InitConfig() {
 	viper.SetConfigType(configType)
 	viper.SetConfigFile(configFile)
 
-	err := viper.ReadInConfig()
+	err := viper.ReadInConfig() //todo: password can not in git file
 
 	if err != nil {
 		fmt.Println(err.Error())
