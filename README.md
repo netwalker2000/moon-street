@@ -1,3 +1,3 @@
 # Moon Street
 
-a minimal market implement in a go RPC manner
+a minimal market implement in golang with primtive TCP and database libs
