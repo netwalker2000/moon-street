@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/spf13/viper"
 )
@@ -37,7 +37,7 @@ func NewConfig() Config {
 	conf := &Config{}
 	err := viper.Unmarshal(conf)
 	if err != nil {
-		fmt.Printf("unable decode into config struct, %v", err)
+		log.Printf("unable decode into config struct, %v", err)
 	}
 	return *conf
 }
@@ -49,6 +49,6 @@ func InitConfig() {
 	err := viper.ReadInConfig() //todo: password can not in git file
 
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 }
