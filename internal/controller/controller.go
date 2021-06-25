@@ -2,19 +2,29 @@ package controller
 
 import (
 	"log"
+	"moon-street/common"
 	"moon-street/internal/model"
 	"moon-street/internal/service"
+	"reflect"
 )
 
-func Route(cmd string) { //injection ;  error raise
-	switch cmd {
-	case "register":
-		Register("testuser", "p1", "a@b.com")
-	default:
-		log.Printf("Unknown cmd! [%s]", cmd)
+func Route(rCmd common.RpcData) { //injection ;  error raise
+	log.Printf("args %v", rCmd.Args...)
+	maps := make(map[string]reflect.Value)
+	maps["register"] = reflect.ValueOf(register)
+	fn, ok := maps[rCmd.Name]
+	if !ok {
+		log.Printf("Unknown cmd, end this conn! [%s]", rCmd.Name)
+		return
 	}
+	inArgs := make([]reflect.Value, len(rCmd.Args))
+	for i := range rCmd.Args {
+		inArgs[i] = reflect.ValueOf(rCmd.Args[i])
+	}
+	fn.Call(inArgs)
 }
-func Register(username, password, email string) {
+
+func register(username, password, email string) {
 	// todo: check params
 	// todo: salt + hash password
 	user := model.User{

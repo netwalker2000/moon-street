@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"moon-street/config"
+	"moon-street/internal/model"
 	"time"
 )
 
@@ -21,13 +22,16 @@ func GetDatabaseInstance() *SqlDatabase {
 	return databaseInstanceSingleton
 }
 
-func (s *SqlDatabase) Save() {
-	stmt := fmt.Sprintf("INSERT into user_tab(name,status, password, email, created_at, updated_at) values ('user%d', 0, 'password', 'user@email.com', current_timestamp, current_timestamp);", s.maxUserId)
+func (s *SqlDatabase) Save(user model.User) (int64, error) {
+	stmt := fmt.Sprintf("INSERT into user_tab(name,status, password, email, created_at, updated_at) values ('%s', 0, '%s', '%s', current_timestamp, current_timestamp);",
+		user.Name, user.Password, user.Email)
 	result, err := s.database.Exec(stmt)
 	if err != nil {
 		log.Printf("Error when save! %v", err) //return the error
+		return 0, err
 	}
 	log.Println(result)
+	return 1, nil
 }
 
 func openDatabase(configuration config.Config) *SqlDatabase {

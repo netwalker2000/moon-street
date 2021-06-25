@@ -5,6 +5,11 @@ import (
 	"log"
 )
 
+type RpcData struct {
+	Name string        //remote function name
+	Args []interface{} //remote function args
+}
+
 func GetStringLine(scanner *bufio.Scanner) (string, bool) {
 	if !scanner.Scan() {
 		log.Println(scanner.Err())

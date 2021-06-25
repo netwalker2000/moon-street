@@ -1,30 +1,34 @@
 package main
 
 import (
-	"bufio"
-	"log"
-	"moon-steet/common"
+	"encoding/binary"
+	"encoding/json"
 	"moon-street/common"
 	"net"
-	"strings"
 )
 
 func main() {
-	log.Println("Client Begin...")
+	var req = common.RpcData{
+		Name: "register",
+		Args: []interface{}{"bbb", "password2", "zzzzzzz@a.com"},
+	}
+	rpcCall(req)
+}
+
+func rpcCall(data common.RpcData) {
 	conn, err := net.Dial("tcp", "127.0.0.1:8001")
 	if err != nil {
-		log.Println("Failed")
-		return
+		panic(err)
 	}
-	reader := bufio.NewScanner(conn)
-
-	for {
-		log.Println(reader)
-		input := common.GetStringLine()
-		input = strings.TrimSpace(input)
-		log.Printf("input: %s", input)
-		conn.Write([]byte(input))
-
+	req, err := json.Marshal(data)
+	if err != nil {
+		panic(err)
 	}
-
+	buf := make([]byte, 4+len(req))
+	binary.BigEndian.PutUint32(buf[:4], uint32(len(req)))
+	copy(buf[4:], req)
+	_, err = conn.Write(buf)
+	if err != nil {
+		panic(err)
+	}
 }

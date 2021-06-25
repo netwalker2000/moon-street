@@ -13,8 +13,7 @@ func NewUserServiceImpl() *UserServiceImpl { //injection
 	return serv
 }
 
-func (s *UserServiceImpl) Save(model.User) (int64, error) {
+func (s *UserServiceImpl) Save(user model.User) (int64, error) {
 	instance := dao.GetDatabaseInstance()
-	instance.Save()
-	return 1, nil
+	return instance.Save(user)
 }
