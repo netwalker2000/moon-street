@@ -1,18 +1,17 @@
 package controller
 
 import (
-	"fmt"
+	"log"
 	"moon-street/internal/model"
 	"moon-street/internal/service"
 )
 
-func Route(cmd string) {
+func Route(cmd string) { //injection ;  error raise
 	switch cmd {
 	case "register":
 		Register("testuser", "p1", "a@b.com")
 	default:
-		Register("testuser", "p1", "a@b.com")
-		fmt.Println("Unknown cmd!" + cmd)
+		log.Printf("Unknown cmd! [%s]", cmd)
 	}
 }
 func Register(username, password, email string) {

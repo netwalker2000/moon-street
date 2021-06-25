@@ -1,13 +1,13 @@
 package dao
 
 import (
-	"fmt"
+	"log"
 	"testing"
 )
 
 func TestMax(t *testing.T) {
-	instance := NewDatabaseInstance()
-	fmt.Println(instance.maxUserId)
+	instance := NewDatabaseInstance() //todo: mock
+	log.Println(instance.maxUserId)
 }
 
 func TestSave(t *testing.T) {

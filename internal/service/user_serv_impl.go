@@ -8,7 +8,7 @@ import (
 type UserServiceImpl struct {
 }
 
-func NewUserServiceImpl() *UserServiceImpl {
+func NewUserServiceImpl() *UserServiceImpl { //injection
 	serv := &UserServiceImpl{}
 	return serv
 }

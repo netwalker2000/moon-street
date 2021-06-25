@@ -2,35 +2,29 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"log"
+	"moon-steet/common"
+	"moon-street/common"
 	"net"
-	"os"
 	"strings"
 )
 
 func main() {
-	fmt.Println("Client Begin...")
+	log.Println("Client Begin...")
 	conn, err := net.Dial("tcp", "127.0.0.1:8001")
 	if err != nil {
-		fmt.Println("Failed")
+		log.Println("Failed")
 		return
 	}
-	reader := bufio.NewReader(os.Stdin)
-	buf := make([]byte, 1024)
+	reader := bufio.NewScanner(conn)
 
 	for {
-		input, _ := reader.ReadString('\n')
+		log.Println(reader)
+		input := common.GetStringLine()
 		input = strings.TrimSpace(input)
+		log.Printf("input: %s", input)
 		conn.Write([]byte(input))
-		//server
-		cnt, err := conn.Read(buf)
 
-		if err != nil {
-			fmt.Printf("Failed %s\n", err)
-			continue
-		}
-
-		fmt.Print("reply:" + string(buf[0:cnt]))
 	}
 
 }

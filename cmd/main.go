@@ -2,21 +2,21 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
+	"moon-street/common"
 	"moon-street/internal/controller"
 	"net"
 )
 
 func main() {
-	fmt.Println("Begin...")
+	log.Println("Begin...")
 	PORT := ":8001"
 	l, err := net.Listen("tcp", PORT)
 	if err != nil {
 		panic(err)
 	}
 	defer l.Close()
-	fmt.Println("Ready")
+	log.Println("Ready")
 
 	for {
 		c, err := l.Accept()
@@ -26,22 +26,16 @@ func main() {
 		go handleConnection(c)
 	}
 }
+
 func handleConnection(c net.Conn) {
 	defer c.Close()
 	scanner := bufio.NewScanner(c)
 	for {
-		cmd, ok := getStringLine(scanner)
+		cmd, ok := common.GetStringLine(scanner)
 		controller.Route(cmd)
 		if !ok {
 			return
 		}
 
 	}
-}
-func getStringLine(scanner *bufio.Scanner) (string, bool) {
-	if !scanner.Scan() {
-		fmt.Println(scanner.Err())
-		return "", false
-	}
-	return scanner.Text(), true
 }
