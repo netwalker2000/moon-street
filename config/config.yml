@@ -1,6 +1,6 @@
 ---
 server:
-  address: ":8080"
+  address: ":8001"
 
 database:
   driver: "mysql"

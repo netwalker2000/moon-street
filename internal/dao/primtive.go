@@ -6,39 +6,19 @@ import (
 	"log"
 	"moon-street/config"
 	"time"
-
-	"github.com/spf13/viper"
 )
 
 const maxDatabaseConnections = 100
 
-var dbUsername string
-var dbPassword string
-var dbName string
-var dbHost string
-var dbPort string
+var databaseInstanceSingleton *SqlDatabase = openDatabase(config.ConfSingleton)
 
 type SqlDatabase struct {
 	database  *sql.DB
 	maxUserId uint64
 }
 
-func init() {
-	//to check: race-condition?
-	config.InitConfig()
-	summary := viper.GetViper().AllKeys()
-	log.Println(summary)
-	dbUsername = viper.GetString("database.username")
-	dbPassword = viper.GetString("database.password")
-	dbHost = viper.GetString("database.host")
-	dbPort = viper.GetString("database.port")
-	dbName = viper.GetString("database.name")
-}
-
-func NewDatabaseInstance() *SqlDatabase {
-	s := &SqlDatabase{}
-	s.openDatabase()
-	return s
+func GetDatabaseInstance() *SqlDatabase {
+	return databaseInstanceSingleton
 }
 
 func (s *SqlDatabase) Save() {
@@ -50,14 +30,19 @@ func (s *SqlDatabase) Save() {
 	log.Println(result)
 }
 
-//todo: init once
-func (s *SqlDatabase) openDatabase() {
-	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUsername, dbPassword, dbHost, dbPort, dbName)
+func openDatabase(configuration config.Config) *SqlDatabase {
+	s := &SqlDatabase{}
+	var dbUsername string = configuration.Database.Username
+	var dbPassword string = configuration.Database.Password
+	var dbName string = configuration.Database.Name
+	var dbHost string = configuration.Database.Host
+	var dbPort int = configuration.Database.Port
+	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", dbUsername, dbPassword, dbHost, dbPort, dbName)
 	db, err := sql.Open("mysql", dataSource)
 	if err != nil {
 		panic(err)
 	}
-
+	log.Printf("Successfully connect to database: %v", db)
 	db.SetConnMaxLifetime(time.Minute)
 	db.SetMaxOpenConns(maxDatabaseConnections)
 	db.SetMaxIdleConns(maxDatabaseConnections)
@@ -69,4 +54,5 @@ func (s *SqlDatabase) openDatabase() {
 	result.Scan(&maxId)
 	log.Printf("Max user id: %d\n", maxId)
 	s.maxUserId = maxId
+	return s
 }

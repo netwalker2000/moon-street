@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -11,44 +13,51 @@ var (
 	configType = "yml"
 )
 
+var ConfSingleton Config = newConfig()
+
 type (
 	Config struct {
-		Debug          bool     `mapstructure:"debug"`
-		ContextTimeout int      `mapstructure:"contextTimeout"`
-		Server         Server   `mapstructure:"server"`
-		Database       Database `mapstructure:"database"`
+		Debug    bool
+		Server   Server
+		Database Database
 	}
 
 	Server struct {
-		Address string `mapstructure:"address"`
+		Address string
 	}
 
 	Database struct {
-		Driver   string `mapstructure:"driver"`
-		Host     string `mapstructure:"host"`
-		Port     int    `mapstructure:"port"`
-		Username string `mapstructure:"username"`
-		Password string `mapstructure:"password"`
-		Name     string `mapstructure:"name"`
+		Driver   string
+		Host     string
+		Port     int
+		Username string
+		Password string
+		Name     string
 	}
 )
 
-func NewConfig() Config {
+func newConfig() Config {
+	initConfig()
 	conf := &Config{}
 	err := viper.Unmarshal(conf)
 	if err != nil {
-		log.Printf("unable decode into config struct, %v", err)
+		fatalErr := fmt.Errorf("error when new config! origin: %v", err)
+		log.Fatalf("fatal error: %v", fatalErr)
+		os.Exit(1)
 	}
+	log.Printf("Successfully init config: %v", conf)
 	return *conf
 }
 
-func InitConfig() {
+func initConfig() {
 	viper.SetConfigType(configType)
 	viper.SetConfigFile(configFile)
 
 	err := viper.ReadInConfig() //todo: password can not in git file
 
 	if err != nil {
-		log.Println(err.Error())
+		fatalErr := fmt.Errorf("error when init config! origin: %v", err)
+		log.Fatalf("fatal error: %v", fatalErr)
+		os.Exit(1)
 	}
 }

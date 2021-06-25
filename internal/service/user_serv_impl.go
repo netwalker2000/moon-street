@@ -14,7 +14,7 @@ func NewUserServiceImpl() *UserServiceImpl { //injection
 }
 
 func (s *UserServiceImpl) Save(model.User) (int64, error) {
-	instance := dao.NewDatabaseInstance()
+	instance := dao.GetDatabaseInstance()
 	instance.Save()
 	return 1, nil
 }
