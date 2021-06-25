@@ -8,9 +8,13 @@ import (
 )
 
 func main() {
+	// var req = common.RpcData{
+	// 	Name: "register",
+	// 	Args: []interface{}{"critical", "password", "xxx@yyyyyy.com"},
+	// }
 	var req = common.RpcData{
-		Name: "register",
-		Args: []interface{}{"bbb", "password2", "zzzzzzz@a.com"},
+		Name: "login",
+		Args: []interface{}{"critical", "password1"},
 	}
 	rpcCall(req)
 }

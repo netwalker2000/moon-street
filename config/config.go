@@ -24,6 +24,7 @@ type (
 
 	Server struct {
 		Address string
+		Salt    string
 	}
 
 	Database struct {

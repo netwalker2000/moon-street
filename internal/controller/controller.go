@@ -12,6 +12,7 @@ func Route(rCmd common.RpcData) { //injection ;  error raise
 	log.Printf("args %v", rCmd.Args...)
 	maps := make(map[string]reflect.Value)
 	maps["register"] = reflect.ValueOf(register)
+	maps["login"] = reflect.ValueOf(login)
 	fn, ok := maps[rCmd.Name]
 	if !ok {
 		log.Printf("Unknown cmd, end this conn! [%s]", rCmd.Name)
@@ -26,7 +27,6 @@ func Route(rCmd common.RpcData) { //injection ;  error raise
 
 func register(username, password, email string) {
 	// todo: check params
-	// todo: salt + hash password
 	user := model.User{
 		Name:     username,
 		Password: password,
@@ -34,4 +34,21 @@ func register(username, password, email string) {
 	}
 	userService := service.NewUserServiceImpl()
 	userService.Save(user)
+}
+
+func login(username, password string) bool {
+	// todo: check params
+	userService := service.NewUserServiceImpl()
+	isPass, err := userService.Check(username, password)
+	if err != nil {
+		log.Printf("error when deal with account check! %v", err)
+		return false
+	} else {
+		if isPass {
+			log.Printf("Login success!")
+		} else {
+			log.Printf("Cannot Login")
+		}
+		return isPass
+	}
 }

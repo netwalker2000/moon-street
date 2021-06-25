@@ -22,6 +22,32 @@ func GetDatabaseInstance() *SqlDatabase {
 	return databaseInstanceSingleton
 }
 
+func (s *SqlDatabase) GetByName(name string) (model.User, error) {
+	stmt := fmt.Sprintf("select id, password, email from user_tab where name = '%s'; ", name)
+	result, err := s.database.Query(stmt)
+	user := &model.User{}
+	if err != nil {
+		log.Printf("Error when query by name! %v", err) //return the error
+		return *user, err
+	}
+	log.Println(result)
+	var (
+		id       int
+		password string
+		email    string
+	)
+	for result.Next() {
+		err := result.Scan(&id, &password, &email)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(id, name, email)
+		user.Password = password
+		user.Email = email
+	}
+	return *user, nil
+}
+
 func (s *SqlDatabase) Save(user model.User) (int64, error) {
 	stmt := fmt.Sprintf("INSERT into user_tab(name,status, password, email, created_at, updated_at) values ('%s', 0, '%s', '%s', current_timestamp, current_timestamp);",
 		user.Name, user.Password, user.Email)
