@@ -7,12 +7,14 @@ import (
 	"moon-street/common"
 	"moon-street/config"
 	"moon-street/internal/controller"
+	"moon-street/internal/di"
 	"net"
 )
 
 func main() {
 	log.Println("Begin...")
-	addr := config.ConfSingleton.Server.Address
+	di.InitDependenciesUseFactories()
+	addr := config.ConfigSingleton.Server.Address
 	log.Printf("Prepare to listen on %s", addr)
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {

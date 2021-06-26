@@ -1,6 +1,7 @@
 ---
 server:
   address: ":8001"
+  salt: "CAFEBABE"
 
 database:
   driver: "mysql"

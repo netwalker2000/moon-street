@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"moon-street/common"
+	"moon-street/internal/di"
 	"moon-street/internal/model"
 	"moon-street/internal/service"
 	"reflect"
@@ -32,13 +33,13 @@ func register(username, password, email string) {
 		Password: password,
 		Email:    email,
 	}
-	userService := service.NewUserServiceImpl()
+	userService := di.InstancesInjection[service.ComponentName].(service.UserService)
 	userService.Save(user)
 }
 
 func login(username, password string) bool {
 	// todo: check params
-	userService := service.NewUserServiceImpl()
+	userService := di.InstancesInjection[service.ComponentName].(service.UserService)
 	isPass, err := userService.Check(username, password)
 	if err != nil {
 		log.Printf("error when deal with account check! %v", err)

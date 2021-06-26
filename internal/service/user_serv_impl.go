@@ -3,20 +3,29 @@ package service
 import (
 	"log"
 	"moon-street/internal/dao"
+	"moon-street/internal/di"
 	"moon-street/internal/model"
 	"moon-street/internal/util"
+	"reflect"
 )
 
 type UserServiceImpl struct {
 }
 
-func NewUserServiceImpl() *UserServiceImpl { //injection
+const ComponentName = "serviceComponent"
+
+func init() {
+	di.Dependencies[ComponentName] = []string{dao.ComponentName}
+	di.Factories[ComponentName] = reflect.ValueOf(newUserServiceImpl)
+}
+
+func newUserServiceImpl() *UserServiceImpl { //injection
 	serv := &UserServiceImpl{}
 	return serv
 }
 
 func (s *UserServiceImpl) Save(user model.User) (int64, error) {
-	instance := dao.GetDatabaseInstance()
+	instance := di.InstancesInjection[dao.ComponentName].(dao.UserRepo)
 	//special treat password
 	ePassword := util.EncryptWithSalt(user.Password)
 	user.Password = ePassword
@@ -24,7 +33,7 @@ func (s *UserServiceImpl) Save(user model.User) (int64, error) {
 }
 
 func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
-	instance := dao.GetDatabaseInstance()
+	instance := di.InstancesInjection[dao.ComponentName].(dao.UserRepo)
 	retUser, err := instance.GetByName(name)
 	if err != nil {
 		log.Fatal("error when check!")

@@ -13,7 +13,7 @@ var (
 	configType = "yml"
 )
 
-var ConfSingleton Config = newConfig()
+var ConfigSingleton Config = newConfig()
 
 type (
 	Config struct {
