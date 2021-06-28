@@ -2,15 +2,12 @@ package dao
 
 import (
 	"log"
+	"moon-street/internal/di"
 	"testing"
 )
 
 func TestMax(t *testing.T) {
-	instance := NewDatabaseInstance() //todo: mock
-	log.Println(instance.maxUserId)
-}
-
-func TestSave(t *testing.T) {
-	instance := NewDatabaseInstance()
-	instance.Save()
+	di.InitDependenciesUseFactories()
+	instance := di.InstancesInjection[ComponentName].(UserRepo)
+	log.Println(instance)
 }

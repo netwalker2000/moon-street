@@ -8,7 +8,6 @@ import (
 )
 
 func TestConfig(t *testing.T) {
-	InitConfig()
 	summary := viper.GetViper().AllKeys()
 	log.Println(summary)
 	port := viper.GetString("database.port")
