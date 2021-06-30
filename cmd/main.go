@@ -36,18 +36,23 @@ func handleConnection(c net.Conn) {
 	header := make([]byte, 4)
 	if _, err := c.Read(header); err != nil {
 		log.Printf("error when read conn header, end this conn :%v", err)
+		c.Write([]byte{0, 0, 0, 0})
 		return
 	}
 	bodyLen := binary.BigEndian.Uint32(header)
+	log.Printf("len of body(big endian): %d", bodyLen)
 	body := make([]byte, int(bodyLen))
 	if _, err := c.Read(body); err != nil {
 		log.Printf("error when read conn body, end this conn :%v", err)
+		c.Write([]byte{0, 0, 0, 0})
 		return
 	}
 	var rData common.RpcData
 	if err := json.Unmarshal(body, &rData); err != nil {
 		log.Printf("error when convert remote data, end this conn :%v", err)
+		c.Write([]byte{0, 0, 0, 0})
 		return
 	}
 	controller.Route(rData)
+	c.Write([]byte{0, 0, 0, 10, 123, 34, 99, 111, 100, 101, 34, 58, 48, 125})
 }
