@@ -21,7 +21,7 @@ func main() {
 }
 
 func rpcCall(data common.RpcData) {
-	conn, err := net.Dial("tcp", "127.0.0.1:8001")
+	conn, err := net.Dial("tcp", "10.143.143.25:8001")
 	if err != nil {
 		panic(err)
 	}
