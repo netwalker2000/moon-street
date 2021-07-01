@@ -1,3 +1,3 @@
 #!/usr/bash
-
-nohup ./cmd > cmd.log 2>&1 &
+cd
+nohup ~/gospace/moon-street/cmd/cmd > cmdgo.log 2>&1 &
