@@ -1,3 +1,4 @@
 .vscode
 client/client
 cmd/cmd
+.DS_Store
