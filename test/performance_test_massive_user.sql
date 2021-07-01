@@ -1,3 +1,4 @@
+DROP PROCEDURE `add_user`;
 CREATE PROCEDURE `add_user`(IN n int)
 BEGIN  
   DECLARE i INT DEFAULT 1;
