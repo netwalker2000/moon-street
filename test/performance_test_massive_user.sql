@@ -1,7 +1,7 @@
 DROP PROCEDURE `add_user`;
 CREATE PROCEDURE `add_user`(IN n int)
 BEGIN  
-  DECLARE i INT DEFAULT 1;
+  DECLARE i INT DEFAULT 1
     WHILE (i <= n ) DO
         INSERT into user_tab (id, name, created_at, updated_at ) VALUEs 
         (i*50, concat('u', i*50), current_timestamp, current_timestamp),
