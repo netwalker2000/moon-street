@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	configFile = "/Users/zezhou.zheng/gospace/moon-street/config/config.yml"
+const (
+	configFile = "/gospace/moon-street/config/config.yml"
 	configType = "yml"
 )
 
@@ -51,8 +51,9 @@ func newConfig() Config {
 }
 
 func initConfig() {
+	homePath := os.Getenv("HOME")
 	viper.SetConfigType(configType)
-	viper.SetConfigFile(configFile)
+	viper.SetConfigFile(homePath + configFile)
 
 	err := viper.ReadInConfig() //todo: password can not in git file
 
