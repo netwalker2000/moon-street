@@ -1,2 +1,3 @@
 .vscode
-
+client/client
+cmd/cmd
