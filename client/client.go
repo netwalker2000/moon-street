@@ -4,14 +4,23 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"log"
+	"math/rand"
 	"moon-street/common"
 	"net"
+	"strconv"
+	"time"
 )
 
 func main() {
+	//random uid
+	timestamp := time.Now().UnixNano()
+	log.Println(timestamp)
+	r := rand.New(rand.NewSource(timestamp))
+	randUname := "u" + strconv.Itoa(r.Intn(9999999)+50)
+
 	var req = common.RpcData{
 		Name: "login",
-		Args: []interface{}{"z15", "password"},
+		Args: []interface{}{randUname, "password"},
 	}
 	// var req = common.RpcData{
 	// 	Name: "login",
