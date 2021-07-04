@@ -18,6 +18,7 @@ func main() {
 	log.Printf("Prepare to listen on %s", addr)
 	listener, err := net.Listen("tcp", addr)
 	if err != nil {
+		log.Printf("cannot net.Listen, please check port!")
 		panic(err)
 	}
 	defer listener.Close()
@@ -26,6 +27,7 @@ func main() {
 	for {
 		c, err := listener.Accept()
 		if err != nil {
+			log.Printf("cannot listener.Accept, please check!")
 			log.Fatal(err)
 		}
 		go handleConnection(c)
@@ -53,6 +55,11 @@ func handleConnection(c net.Conn) {
 		c.Write([]byte{0, 0, 0, 0})
 		return
 	}
+	defer func() {
+		if e := recover(); e != nil {
+			log.Printf("error when goroutine: %v", e)
+		}
+	}()
 	controller.Route(rData)
 	c.Write([]byte{0, 0, 0, 10, 123, 34, 99, 111, 100, 101, 34, 58, 48, 125})
 }

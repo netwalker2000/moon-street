@@ -20,7 +20,7 @@ func main() {
 
 	var req = common.RpcData{
 		Name: "login",
-		Args: []interface{}{randUname, "password"},
+		Args: []interface{}{randUname, "password1"},
 	}
 	// var req = common.RpcData{
 	// 	Name: "login",
@@ -30,7 +30,7 @@ func main() {
 }
 
 func rpcCall(data common.RpcData) {
-	conn, err := net.Dial("tcp", "10.143.143.25:8001")
+	conn, err := net.Dial("tcp", "localhost:8001")
 	if err != nil {
 		panic(err)
 	}

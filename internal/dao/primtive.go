@@ -42,7 +42,7 @@ func (s *UserDataAccessPrimitiveImpl) GetByName(name string) (model.User, error)
 	for result.Next() {
 		err := result.Scan(&id, &password, &email)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("error when parse sql result: %v", err)
 		}
 		log.Println(id, name, email)
 		user.Password = password

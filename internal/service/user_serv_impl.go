@@ -36,12 +36,12 @@ func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
 	instance := di.InstancesInjection[dao.ComponentName].(dao.UserRepo)
 	retUser, err := instance.GetByName(name)
 	if err != nil {
-		log.Fatal("error when check!")
+		log.Printf("error when check! %v", err)
 		return false, err
 	}
 	ePassword := util.EncryptWithSalt(password)
 	if retUser.Password != ePassword {
-		log.Fatal("cannot login, not match!")
+		log.Printf("cannot login, not match!")
 		return false, nil
 	}
 	return true, nil
