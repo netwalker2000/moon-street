@@ -10,7 +10,7 @@ import (
 )
 
 func Route(rCmd common.RpcData) { //injection ;  error raise
-	log.Printf("args %v", rCmd.Args...)
+	//log.Printf("args %v", rCmd.Args...)
 	maps := make(map[string]reflect.Value)
 	maps["register"] = reflect.ValueOf(register)
 	maps["login"] = reflect.ValueOf(login)
@@ -46,7 +46,7 @@ func login(username, password string) bool {
 		return false
 	} else {
 		if isPass {
-			log.Printf("Login success!")
+			//log.Printf("Login success!")
 		} else {
 			log.Printf("Cannot Login")
 		}

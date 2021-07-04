@@ -14,6 +14,8 @@ type UserServiceImpl struct {
 
 const ComponentName = "serviceComponent"
 
+var cache = make(map[string]string)
+
 func init() {
 	di.Dependencies[ComponentName] = []string{dao.ComponentName}
 	di.Factories[ComponentName] = reflect.ValueOf(newUserServiceImpl)
@@ -33,6 +35,13 @@ func (s *UserServiceImpl) Save(user model.User) (int64, error) {
 }
 
 func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
+	if hit, ok := cache[name]; ok {
+		if hit == password {
+			return true, nil
+		} else {
+			return false, nil
+		}
+	}
 	instance := di.InstancesInjection[dao.ComponentName].(dao.UserRepo)
 	retUser, err := instance.GetByName(name)
 	if err != nil {
@@ -44,5 +53,6 @@ func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
 		log.Printf("cannot login, not match!")
 		return false, nil
 	}
+	cache[name] = password
 	return true, nil
 }

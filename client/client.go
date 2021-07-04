@@ -17,10 +17,11 @@ func main() {
 	log.Println(timestamp)
 	r := rand.New(rand.NewSource(timestamp))
 	randUname := "u" + strconv.Itoa(r.Intn(9999999)+50)
+	log.Println(randUname)
 
 	var req = common.RpcData{
 		Name: "login",
-		Args: []interface{}{randUname, "password1"},
+		Args: []interface{}{"u51", "password"},
 	}
 	// var req = common.RpcData{
 	// 	Name: "login",

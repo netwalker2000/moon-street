@@ -42,7 +42,7 @@ func handleConnection(c net.Conn) {
 		return
 	}
 	bodyLen := binary.BigEndian.Uint32(header)
-	log.Printf("len of body(big endian): %d", bodyLen)
+	//log.Printf("len of body(big endian): %d", bodyLen)
 	body := make([]byte, int(bodyLen))
 	if _, err := c.Read(body); err != nil {
 		log.Printf("error when read conn body, end this conn :%v", err)
