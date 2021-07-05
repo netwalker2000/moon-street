@@ -7,6 +7,8 @@ import (
 	"moon-street/internal/model"
 	"moon-street/internal/util"
 	"reflect"
+
+	"golang.org/x/sync/syncmap"
 )
 
 type UserServiceImpl struct {
@@ -14,7 +16,7 @@ type UserServiceImpl struct {
 
 const ComponentName = "serviceComponent"
 
-var cache = make(map[string]string)
+var cache = syncmap.Map{}
 
 func init() {
 	di.Dependencies[ComponentName] = []string{dao.ComponentName}
@@ -35,7 +37,7 @@ func (s *UserServiceImpl) Save(user model.User) (int64, error) {
 }
 
 func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
-	if hit, ok := cache[name]; ok {
+	if hit, ok := cache.Load(name); ok {
 		if hit == password {
 			return true, nil
 		} else {
@@ -53,6 +55,6 @@ func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
 		log.Printf("cannot login, not match!")
 		return false, nil
 	}
-	cache[name] = password
+	cache.Store(name, password)
 	return true, nil
 }

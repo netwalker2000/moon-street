@@ -6,7 +6,7 @@ server:
 database:
   driver: "mysql"
   host: "localhost"
-  port: 3333
+  port: 3306
   username: "root"
   password: "root"
   name: "db_test"
