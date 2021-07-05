@@ -1,4 +1,5 @@
 .vscode
+crawler/crawler
 client/client
 cmd/cmd
 .DS_Store
