@@ -49,7 +49,7 @@ func handleConnection(c net.Conn) {
 		c.Write([]byte{0, 0, 0, 0})
 		return
 	}
-	var rData common.RpcData
+	var rData []common.RpcData
 	if err := json.Unmarshal(body, &rData); err != nil {
 		log.Printf("error when convert remote data, end this conn :%v", err)
 		c.Write([]byte{0, 0, 0, 0})
@@ -60,6 +60,14 @@ func handleConnection(c net.Conn) {
 			log.Printf("error when goroutine: %v", e)
 		}
 	}()
-	controller.Route(rData)
+	for i, v := range rData {
+		err := controller.Route(v)
+		//log.Printf("%v", v)
+		if err != nil {
+			log.Printf("error when exec No.%d in the batch :%v", i, err)
+			c.Write([]byte{0, 0, 0, 0})
+			return
+		}
+	}
 	c.Write([]byte{0, 0, 0, 10, 123, 34, 99, 111, 100, 101, 34, 58, 48, 125})
 }

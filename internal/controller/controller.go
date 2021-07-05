@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"log"
 	"moon-street/common"
 	"moon-street/internal/di"
@@ -9,7 +10,7 @@ import (
 	"reflect"
 )
 
-func Route(rCmd common.RpcData) { //injection ;  error raise
+func Route(rCmd common.RpcData) error { //injection ;  error raise
 	//log.Printf("args %v", rCmd.Args...)
 	maps := make(map[string]reflect.Value)
 	maps["register"] = reflect.ValueOf(register)
@@ -17,13 +18,14 @@ func Route(rCmd common.RpcData) { //injection ;  error raise
 	fn, ok := maps[rCmd.Name]
 	if !ok {
 		log.Printf("Unknown cmd, end this conn! [%s]", rCmd.Name)
-		return
+		return errors.New("unknown cmd")
 	}
 	inArgs := make([]reflect.Value, len(rCmd.Args))
 	for i := range rCmd.Args {
 		inArgs[i] = reflect.ValueOf(rCmd.Args[i])
 	}
 	fn.Call(inArgs)
+	return nil
 }
 
 func register(username, password, email string) {
