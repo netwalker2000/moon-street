@@ -33,7 +33,7 @@ func (s *UserDataAccessPrimitiveImpl) GetByName(name string) (model.User, error)
 		log.Printf("Error when query by name! %v", err) //return the error
 		return *user, err
 	}
-	log.Println(result)
+	//log.Println(result)
 	var (
 		id       int
 		password string
@@ -44,7 +44,7 @@ func (s *UserDataAccessPrimitiveImpl) GetByName(name string) (model.User, error)
 		if err != nil {
 			log.Printf("error when parse sql result: %v", err)
 		}
-		log.Println(id, name, email)
+		//log.Println(id, name, email)
 		user.Password = password
 		user.Email = email
 	}
