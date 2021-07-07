@@ -31,7 +31,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="name" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">z${__Random(51,1000000,)}</stringProp>
+                <stringProp name="Argument.value">u${__Random(51,1000000,)}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">name</stringProp>
