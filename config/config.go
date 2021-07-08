@@ -46,7 +46,7 @@ func newConfig() Config {
 		log.Fatalf("fatal error: %v", fatalErr)
 		os.Exit(1)
 	}
-	log.Printf("Successfully init config: %v", conf)
+	log.Printf("Successfully init config: %v", conf.Debug)
 	return *conf
 }
 

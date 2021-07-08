@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"moon-street/common"
 	"moon-street/config"
@@ -14,6 +15,9 @@ import (
 func main() {
 	log.Println("Begin...")
 	di.InitDependenciesUseFactories()
+	if !config.ConfigSingleton.Debug {
+		log.SetOutput(ioutil.Discard)
+	}
 	addr := config.ConfigSingleton.Server.Address
 	log.Printf("Prepare to listen on %s", addr)
 	listener, err := net.Listen("tcp", addr)

@@ -1,4 +1,6 @@
 ---
+debug: true
+
 server:
   address: ":8001"
   salt: "CAFEBABE"
@@ -6,7 +8,7 @@ server:
 database:
   driver: "mysql"
   host: "localhost"
-  port: 3306
+  port: 3333
   username: "root"
   password: "root"
   name: "db_test"
