@@ -29,7 +29,10 @@ func newUserServiceImpl() *UserServiceImpl { //injection
 }
 
 func (s *UserServiceImpl) Save(user model.User) (int64, error) {
-	instance := di.InstancesInjection[dao.ComponentName].(dao.UserRepo)
+	type UserSaveInterface interface {
+		Save(model.User) (int64, error)
+	}
+	instance := di.InstancesInjection[dao.ComponentName].(UserSaveInterface)
 	//special treat password
 	ePassword := util.EncryptWithSalt(user.Password)
 	user.Password = ePassword
@@ -44,7 +47,10 @@ func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
 			return false, nil
 		}
 	}
-	instance := di.InstancesInjection[dao.ComponentName].(dao.UserRepo)
+	type UserQueryInterface interface {
+		GetByName(string) (model.User, error)
+	}
+	instance := di.InstancesInjection[dao.ComponentName].(UserQueryInterface)
 	retUser, err := instance.GetByName(name)
 	if err != nil {
 		log.Printf("error when check! %v", err)

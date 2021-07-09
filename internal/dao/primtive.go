@@ -25,6 +25,10 @@ func init() {
 	di.Factories[ComponentName] = reflect.ValueOf(openDatabase)
 }
 
+func (s *UserDataAccessPrimitiveImpl) GetById(id int64) (model.User, error) {
+	return model.User{}, nil
+}
+
 func (s *UserDataAccessPrimitiveImpl) GetByName(name string) (model.User, error) {
 	stmt := fmt.Sprintf("select id, password, email from user_tab where name = '%s'; ", name)
 	result, err := s.database.Query(stmt)

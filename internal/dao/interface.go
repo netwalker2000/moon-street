@@ -7,6 +7,7 @@ import (
 )
 
 type UserRepo interface {
+	GetById(int64) (model.User, error)
 	GetByName(string) (model.User, error)
 	Save(model.User) (int64, error)
 }
