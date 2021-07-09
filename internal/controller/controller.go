@@ -7,11 +7,11 @@ import (
 	"moon-street/internal/di"
 	"moon-street/internal/model"
 	"moon-street/internal/service"
+	"moon-street/internal/util"
 	"reflect"
 )
 
 func Route(rCmd common.RpcData) error { //injection ;  error raise
-	//log.Printf("args %v", rCmd.Args...)
 	maps := make(map[string]reflect.Value)
 	maps["register"] = reflect.ValueOf(register)
 	maps["login"] = reflect.ValueOf(login)
@@ -40,17 +40,18 @@ func register(username, password, email string) {
 }
 
 func login(username, password string) bool {
+	var go_id = util.GoID()
 	// todo: check params
 	userService := di.InstancesInjection[service.ComponentName].(service.UserService)
 	isPass, err := userService.Check(username, password)
 	if err != nil {
-		log.Printf("error when deal with account check! %v", err)
+		log.Printf("error when deal with account check! [%d] %v", go_id, err)
 		return false
 	} else {
 		if isPass {
-			//log.Printf("Login success!")
+			log.Printf("Login success with user %s! [%d]", username, go_id)
 		} else {
-			log.Printf("Cannot Login")
+			log.Printf("Cannot Login with user %s! [%d]", username, go_id)
 		}
 		return isPass
 	}

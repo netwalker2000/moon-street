@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -42,11 +41,10 @@ func newConfig() Config {
 	conf := &Config{}
 	err := viper.Unmarshal(conf)
 	if err != nil {
-		fatalErr := fmt.Errorf("error when new config! origin: %v", err)
-		log.Fatalf("fatal error: %v", fatalErr)
+		log.Fatalf("fatal error when read config: %v", err)
 		os.Exit(1)
 	}
-	log.Printf("Successfully init config: %v", conf.Debug)
+	log.Printf("Successfully init config: %v", conf)
 	return *conf
 }
 
@@ -55,11 +53,10 @@ func initConfig() {
 	viper.SetConfigType(configType)
 	viper.SetConfigFile(homePath + configFile)
 
-	err := viper.ReadInConfig() //todo: password can not in git file
+	err := viper.ReadInConfig()
 
 	if err != nil {
-		fatalErr := fmt.Errorf("error when init config! origin: %v", err)
-		log.Fatalf("fatal error: %v", fatalErr)
+		log.Fatalf("fatal error when init config: %v", err)
 		os.Exit(1)
 	}
 }

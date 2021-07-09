@@ -7,6 +7,7 @@ import (
 	"moon-street/config"
 	"moon-street/internal/di"
 	"moon-street/internal/model"
+	"moon-street/internal/util"
 	"reflect"
 	"time"
 )
@@ -30,11 +31,12 @@ func (s *UserDataAccessPrimitiveImpl) GetById(id int64) (model.User, error) {
 }
 
 func (s *UserDataAccessPrimitiveImpl) GetByName(name string) (model.User, error) {
+	var go_id = util.GoID()
 	stmt := fmt.Sprintf("select id, password, email from user_tab where name = '%s'; ", name)
 	result, err := s.database.Query(stmt)
 	user := &model.User{}
 	if err != nil {
-		log.Printf("Error when query by name! %v", err) //return the error
+		log.Printf("Error when query by name! [%d] %v", go_id, err) //return the error
 		return *user, err
 	}
 	//log.Println(result)
@@ -46,9 +48,8 @@ func (s *UserDataAccessPrimitiveImpl) GetByName(name string) (model.User, error)
 	for result.Next() {
 		err := result.Scan(&id, &password, &email)
 		if err != nil {
-			log.Printf("error when parse sql result: %v", err)
+			log.Printf("error when parse sql result: [%d] %v", go_id, err)
 		}
-		//log.Println(id, name, email)
 		user.Password = password
 		user.Email = email
 	}

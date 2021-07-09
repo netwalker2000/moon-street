@@ -40,6 +40,7 @@ func (s *UserServiceImpl) Save(user model.User) (int64, error) {
 }
 
 func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
+	var go_id = util.GoID()
 	if hit, ok := cache.Load(name); ok {
 		if hit == password {
 			return true, nil
@@ -53,12 +54,12 @@ func (s *UserServiceImpl) Check(name string, password string) (bool, error) {
 	instance := di.InstancesInjection[dao.ComponentName].(UserQueryInterface)
 	retUser, err := instance.GetByName(name)
 	if err != nil {
-		log.Printf("error when check! %v", err)
+		log.Printf("error when check! [%d] %v", go_id, err)
 		return false, err
 	}
 	ePassword := util.EncryptWithSalt(password)
 	if retUser.Password != ePassword {
-		log.Printf("cannot login, not match!")
+		log.Printf("cannot login, not match! [%d] username: %s", go_id, name)
 		return false, nil
 	}
 	cache.Store(name, password)

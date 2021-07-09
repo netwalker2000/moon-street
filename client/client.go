@@ -21,12 +21,8 @@ func main() {
 
 	var req = common.RpcData{
 		Name: "login",
-		Args: []interface{}{"z51", "password"},
+		Args: []interface{}{randUname, "password"},
 	}
-	// var req = common.RpcData{
-	// 	Name: "login",
-	// 	Args: []interface{}{"goon_test_3", "password"},
-	// }
 	rpcCall([]common.RpcData{req})
 }
 
